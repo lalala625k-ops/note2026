@@ -14,19 +14,19 @@ if not exist ".git" (
     exit /b 1
 )
 
-echo [1/3] Pulling remote updates...
-git pull --rebase origin main
-
-echo [2/3] Staging database changes...
+echo [1/3] Staging database changes...
 git add .
 
 git diff-index --quiet HEAD --
 if %errorlevel% equ 0 (
-    echo [INFO] No changes detected. Database is already up to date.
+    echo [INFO] No changes detected. Database is up to date locally.
 ) else (
     echo [INFO] Changes detected, committing...
     git commit -m "Auto backup: %date% %time%"
 )
+
+echo [2/3] Pulling remote updates (rebase)...
+git pull --rebase origin main
 
 echo [3/3] Pushing to GitHub...
 git push origin main
